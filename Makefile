@@ -13,7 +13,7 @@ CFLAGS+= -Wall
 
 ifeq ($(PLATFORM),Darwin)
 ## Mac OS X
-CFLAGS += -m64  -Wno-deprecated
+CFLAGS += -m64  -Wno-deprecated -std=c++11
 INCLUDEPATH=-I/system/usr/local/include 
 LDFLAGS+= -m64 -lc -framework AGL -framework OpenGL -framework GLUT -framework Foundation
 else
