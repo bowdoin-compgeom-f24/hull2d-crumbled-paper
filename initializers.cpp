@@ -148,7 +148,7 @@ void initialize_points_tic_tac_toe(vector<point2d> &pts, int n)
         p.y = border + (WINDOWSIZE - 2 * border) * i / (n / 4 - 1);
         pts.push_back(p);
 
-        // Second vertical line
+        // second vertical line
         p.x = 2 * step;
         pts.push_back(p);
     }
@@ -186,7 +186,7 @@ void initialize_points_honeycomb(vector<point2d> &pts, int n)
     point2d p;
     int step = WINDOWSIZE / 3;
 
-    // Center of the honeycomb
+    // center of the honeycomb
     double centerX = WINDOWSIZE / 2;
     double centerY = WINDOWSIZE / 2;
 
