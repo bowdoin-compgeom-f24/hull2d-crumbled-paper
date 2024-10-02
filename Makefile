@@ -32,7 +32,7 @@ PROGS = hull2d
 
 default: $(PROGS)
 
-hull2d: viewhull.o geom.o rtimer.o
+hull2d: viewhull.o geom.o rtimer.o initializers.o
 	$(CC) -o $@ viewhull.o geom.o rtimer.o $(LDFLAGS)
 
 viewhull.o: viewhull.cpp  geom.h rtimer.h
@@ -44,6 +44,8 @@ geom.o: geom.cpp geom.h
 rtimer.o: rtimer.h rtimer.c
 	$(CC) -c $(CFLAGS)  rtimer.c -o $@
 
+initializers.o: initializers.cpp
+	$(CC) -c $(CFLAGS)  initializers.cpp -o $@
 
 
 clean:

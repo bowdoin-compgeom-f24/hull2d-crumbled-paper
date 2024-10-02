@@ -10,6 +10,7 @@
 
 #include "geom.h"
 #include "rtimer.h"
+#include "initializers.cpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -67,14 +68,11 @@ vector<point2d> points;
 // note: needs to be global in order to be rendered
 vector<point2d> hull;
 
-// window size for the graphics window
-const int WINDOWSIZE = 500;
-
 /* currently there are 4 different ways to initialize points.  The
    user can cycle through them by pressing 'i'. Check out the display()
    function.
 */
-int NB_INIT_CHOICES = 4;
+int NB_INIT_CHOICES = 11;
 int POINT_INIT_MODE = 0; // the first inititalizer
 
 /********************************************************************/
@@ -94,122 +92,6 @@ void draw_hull(vector<point2d> hull);
 
 void display(void);
 void keypress(unsigned char key, int x, int y);
-
-// initializer function
-void initialize_points_circle(vector<point2d> &pts, int n);
-void initialize_points_horizontal_line(vector<point2d> &pts, int n);
-void initialize_points_random(vector<point2d> &pts, int n);
-void initialize_points_cross(vector<point2d> &pts, int n);
-
-// you'll add more
-
-/********************************************************************/
-
-/* ****************************** */
-/* Initializes pts with n points on two circles.  The points are in the
-   range [0, WINSIZE] x [0, WINSIZE].
-*/
-void initialize_points_circle(vector<point2d> &pts, int n)
-{
-
-  printf("\ninitialize points circle\n");
-  // clear the vector just to be safe
-  pts.clear();
-
-  n = n / 2; // we'll generaate two circles, n/2 points each
-  double step = 2 * M_PI / n;
-  int radius = 100;
-
-  point2d p;
-  for (int i = 0; i < n; i++)
-  {
-    p.x = WINDOWSIZE / 2 + radius * cos(i * step);
-    p.y = WINDOWSIZE / 2 + radius * sin(i * step);
-    pts.push_back(p);
-  }
-
-  radius /= 2;
-  for (int i = 0; i < n; i++)
-  {
-    p.x = WINDOWSIZE / 2 + radius * cos(i * step);
-    p.y = WINDOWSIZE / 2 + radius * sin(i * step);
-    pts.push_back(p);
-  }
-}
-
-/* ****************************** */
-/* Initializes pts with n points on a line.  The points are in the
-   range [0, WINSIZE] x [0, WINSIZE].
-*/
-void initialize_points_horizontal_line(vector<point2d> &pts, int n)
-{
-
-  printf("\ninitialize points line\n");
-  // clear the vector just to be safe
-  pts.clear();
-
-  point2d p;
-  for (int i = 0; i < n; i++)
-  {
-    p.x = (int)(.3 * WINDOWSIZE) / 2 + random() % ((int)(.7 * WINDOWSIZE));
-    p.y = WINDOWSIZE / 2;
-    pts.push_back(p);
-  }
-}
-
-/* ****************************** */
-/* Initializes pts with n random points.  The points are in the
-   range [0, WINSIZE] x [0, WINSIZE].
-*/
-void initialize_points_random(vector<point2d> &pts, int n)
-{
-
-  printf("\ninitialize points random\n");
-  // clear the vector just to be safe
-  pts.clear();
-
-  point2d p;
-  for (int i = 0; i < n; i++)
-  {
-    p.x = (int)(.3 * WINDOWSIZE) / 2 + random() % ((int)(.7 * WINDOWSIZE));
-    p.y = (int)(.3 * WINDOWSIZE) / 2 + random() % ((int)(.7 * WINDOWSIZE));
-    pts.push_back(p);
-  }
-}
-
-/* ****************************** */
-/* Initializes pts with n points on a cross-like shape.  The points are
-   in the range (0,0) to (WINSIZE,WINSIZE).
-*/
-void initialize_points_cross(vector<point2d> &pts, int n)
-{
-
-  printf("\ninitialize points cross\n");
-  // clear the vector just to be safe
-  pts.clear();
-
-  point2d p;
-  for (int i = 0; i < n; i++)
-  {
-    if (i % 2 == 0)
-    {
-
-      p.x = (int)(.3 * WINDOWSIZE) / 2 + random() % ((int)(.7 * WINDOWSIZE));
-      p.y = random() % ((int)(.7 * WINDOWSIZE)) / 5;
-      p.y += (int)((1 - .7 / 5) * WINDOWSIZE / 2);
-    };
-    if (i % 2 == 1)
-    {
-
-      p.x = random() % ((int)(.7 * WINDOWSIZE)) / 5;
-      p.x += (int)((1 - .7 / 5) * WINDOWSIZE / 2);
-      p.y = (int)(.3 * WINDOWSIZE) / 2 + random() % ((int)(.7 * WINDOWSIZE));
-    }
-
-    pts.push_back(p);
-
-  } // for i
-}
 
 /* ****************************** */
 /* print the vector of points */
@@ -237,23 +119,6 @@ int main(int argc, char **argv)
   NPOINTS = atoi(argv[1]);
   printf("you entered n=%d\n", NPOINTS);
   assert(NPOINTS > 0);
-
-  // populate the points
-  initialize_points_random(points, NPOINTS);
-  // print_vector("points:", points);
-
-  // compute the convex hull
-  Rtimer rt1;
-  rt_start(rt1);
-  graham_scan(points, hull);
-  rt_stop(rt1);
-  print_vector("hull:", hull);
-
-  // print the timing
-  char buf[1024];
-  rt_sprint(buf, rt1);
-  printf("hull time:  %s\n\n", buf);
-  fflush(stdout);
 
   // start the rendering
   /* initialize GLUT  */
@@ -395,9 +260,41 @@ void keypress(unsigned char key, int x, int y)
     case 3:
       initialize_points_random(points, NPOINTS);
       break;
+    case 4:
+      initialize_points_tic_tac_toe(points, NPOINTS);
+      break;
+    case 5:
+      initialize_points_honeycomb(points, NPOINTS);
+      break;
+    case 6:
+      initialize_points_wave(points, NPOINTS);
+      break;
+    case 7:
+      initialize_points_spiral(points, NPOINTS);
+      break;
+    case 8:
+      initialize_points_heart(points, NPOINTS);
+      break;
+    case 9:
+      initialize_points_1(points, NPOINTS);
+      break;
+    case 10:
+      initialize_points_2(points, NPOINTS);
     } // switch
+    // print_vector("points:", points);
     // we changed the points, so we need to recompute the hull
+    // compute the convex hull
+    Rtimer rt1;
+    rt_start(rt1);
     graham_scan(points, hull);
+    rt_stop(rt1);
+    print_vector("hull: ", hull);
+
+    // print the timing
+    char buf[1024];
+    rt_sprint(buf, rt1);
+    printf("hull time: %s\n\n", buf);
+    fflush(stdout);
 
     // we changed stuff, so we need to tell GL to redraw
     glutPostRedisplay();

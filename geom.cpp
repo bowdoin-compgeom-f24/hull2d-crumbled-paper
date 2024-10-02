@@ -58,6 +58,12 @@ void graham_scan(vector<point2d> &pts, vector<point2d> &hull)
   printf("hull2d (graham scan): start\n");
   hull.clear(); // should be empty, but clear it to be safe
 
+  if (pts.size() == 1)
+  {
+    hull.push_back(pts[0]);
+    return;
+  }
+
   // find rightmost lowest point
   point2d p = pts[0];
   for (int i = 1; i < pts.size(); i++)
@@ -93,23 +99,21 @@ void graham_scan(vector<point2d> &pts, vector<point2d> &hull)
   // add first point to the right of p
   hull.push_back(pts[1]);
 
-  my_print_vector("sorted points", pts);
-  my_print_vector("pre hull", hull);
-
   for (int i = 1; i < pts.size(); i++)
   {
     point2d b = hull.back();
-    hull.pop_back();
+    hull.pop_back(); // remove b
     point2d a = hull.back();
 
     while (!left_strictly(a, b, pts[i]))
     {
       b = a;
-      hull.pop_back();
-      // if (hull.size() < 2)
-      // {
-      //   break;
-      // }
+      hull.pop_back(); // remove a
+      // ensure the first two points are never popped
+      if (hull.size() < 2)
+      {
+        break;
+      }
       a = hull.back();
     }
 
