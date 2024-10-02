@@ -245,7 +245,6 @@ void keypress(unsigned char key, int x, int y)
   case 'i':
     // when the user presses 'i', we want to re-initialize the points and
     // recompute the hull
-    POINT_INIT_MODE = (POINT_INIT_MODE + 1) % NB_INIT_CHOICES;
     switch (POINT_INIT_MODE)
     {
     case 0:
@@ -280,7 +279,10 @@ void keypress(unsigned char key, int x, int y)
       break;
     case 10:
       initialize_points_2(points, NPOINTS);
+      break;
     } // switch
+    POINT_INIT_MODE = (POINT_INIT_MODE + 1) % NB_INIT_CHOICES;
+
     // print_vector("points:", points);
     // we changed the points, so we need to recompute the hull
     // compute the convex hull

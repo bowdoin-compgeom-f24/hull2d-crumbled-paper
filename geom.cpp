@@ -7,17 +7,6 @@
 
 using namespace std;
 
-void my_print_vector(const char *label, vector<point2d> points)
-{
-
-  printf("%s ", label);
-  for (int i = 0; i < points.size(); i++)
-  {
-    printf("[%3d,%3d] ", points[i].x, points[i].y);
-  }
-  printf("\n");
-}
-
 /* **************************************** */
 /* returns the signed area of triangle abc. The area is positive if c
    is to the left of ab, and negative if c is to the right of ab
@@ -99,7 +88,7 @@ void graham_scan(vector<point2d> &pts, vector<point2d> &hull)
   // add first point to the right of p
   hull.push_back(pts[1]);
 
-  for (int i = 1; i < pts.size(); i++)
+  for (int i = 2; i < pts.size(); i++)
   {
     point2d b = hull.back();
     hull.pop_back(); // remove b
@@ -109,8 +98,8 @@ void graham_scan(vector<point2d> &pts, vector<point2d> &hull)
     {
       b = a;
       hull.pop_back(); // remove a
-      // ensure the first two points are never popped
-      if (hull.size() < 2)
+      // ensure the first point is not removed
+      if (hull.size() == 0)
       {
         break;
       }
